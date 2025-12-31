@@ -1,4 +1,0 @@
-streamlit
-fyers-apiv3
-pandas
-numpy
