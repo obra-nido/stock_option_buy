@@ -13,7 +13,7 @@ def get_access_token(client_id, secret_key, redirect_uri, auth_code):
     response = session.generate_token()
     return response.get("access_token")
 
-def get_historical_data(fyers, symbol, resolution, date_format="0", range_from=None, range_to=None, cont_flag="1"):
+def get_historical_data(fyers, symbol, resolution, date_format=0, range_from=None, range_to=None, cont_flag="1"):
     data = {
         "symbol": symbol,
         "resolution": resolution,
@@ -24,23 +24,40 @@ def get_historical_data(fyers, symbol, resolution, date_format="0", range_from=N
     }
     return fyers.history(data=data)
 
+# src/fyers_client.py
+from fyers_apiv3.FyersWebsocket import data_ws
+
 def subscribe_to_live_data(access_token, symbols, on_message):
+    """
+    access_token: 'APP_ID:ACCESS_TOKEN'
+    symbols: ['NSE:SBIN-EQ']
+    on_message: function(message: dict) -> None
+    """
     def on_open():
+        print("WebSocket connected")
+        # SymbolUpdate gives full tick including ltp, volume etc. [web:12][web:39]
         fyers_ws.subscribe(symbols=symbols, data_type="SymbolUpdate")
         fyers_ws.keep_running()
+
+    def on_close(msg):
+        print(f"Connection closed: {msg}")
+
+    def on_error(msg):
+        print(f"Error: {msg}")
 
     fyers_ws = data_ws.FyersDataSocket(
         access_token=access_token,
         log_path="",
-        litemode=False,
+        litemode=False,          # keep False since you use full SymbolUpdate [web:13]
         write_to_file=False,
         reconnect=True,
         on_connect=on_open,
-        on_close=lambda msg: print(f"Connection closed: {msg}"),
-        on_error=lambda msg: print(f"Error: {msg}"),
-        on_message=on_message
+        on_close=on_close,
+        on_error=on_error,
+        on_message=on_message,   # MUST be def on_message(message)
     )
     fyers_ws.connect()
+
 
 def place_order(fyers, symbol, qty, side, order_type, limit_price=0, stop_price=0, validity="DAY", disclosed_qty=0, offline_order=False, stop_loss=0, take_profit=0):
     data = {

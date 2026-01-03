@@ -1,12 +1,13 @@
 import pandas as pd
 import numpy as np
 
-def calculate_moving_averages(prices, short_window, medium_window, long_window):
+def calculate_moving_averages(prices, short_window, medium_window, long_window,extra_long_window):
     prices_series = pd.Series(prices)
     short_ma = prices_series.rolling(window=short_window).mean()
     medium_ma = prices_series.rolling(window=medium_window).mean()
     long_ma = prices_series.rolling(window=long_window).mean()
-    return short_ma, medium_ma, long_ma
+    extra_long_ma = prices_series.rolling(window=extra_long_window).mean()
+    return short_ma, medium_ma, long_ma, extra_long_ma
 
 def detect_signal(prices, short_ma, medium_ma, long_ma):
     latest_price = prices[-1]

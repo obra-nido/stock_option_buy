@@ -3,7 +3,9 @@ sdk: streamlit
 title: Directional Trading Bot
 python_version: '3.12'
 ---
-
+cd /d "F:\Trading Bot\Directional Trading Bot"
+conda install -c conda-forge streamlit fyers-apiv3 pandas numpy setuptools -y
+conda list streamlit
 
 # Fyers Trading Bot
 
@@ -16,6 +18,19 @@ This is a Streamlit-based trading bot that connects to the Fyers API and execute
 -   Configurable moving average periods, timeframe, and other trading parameters.
 -   Trailing stop-loss based on a moving average.
 -   User-friendly interface built with Streamlit.
+
+## Development Environment
+
+For the best development experience, we recommend using a modern code editor like Visual Studio Code.
+
+### Visual Studio Code Setup
+
+1.  **Install VS Code**: If you don't have it already, download and install [Visual Studio Code](https://code.visualstudio.com/).
+
+2.  **Recommended Extensions**: For an enhanced Python and Streamlit development experience, we recommend installing the following extensions:
+    *   [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) (Microsoft)
+    *   [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) (Microsoft)
+    *   [Streamlit](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.streamlit) (Microsoft)
 
 ## Setup
 
